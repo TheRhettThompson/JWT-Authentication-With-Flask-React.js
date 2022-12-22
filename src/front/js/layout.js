@@ -7,6 +7,8 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 import { Signup } from "./pages/signup";
+import { Login } from "./pages/login";
+import { Private } from "./pages/private";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -32,6 +34,10 @@ const Layout = () => {
                         <Route path="/single/:theid" element={<Single />}/>
 
                         <Route exact path="/signup" element={<Signup />}/>
+
+                        <Route exact path="=/login" element={<Login />}/>
+
+                        <Route exact path="/private" element={<Private />}/>
                     </Routes>
                     <Footer />
                 </ScrollToTop>

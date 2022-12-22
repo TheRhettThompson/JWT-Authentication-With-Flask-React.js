@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+#from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
 api = Blueprint('api', __name__)
 
@@ -19,12 +19,13 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+
 @api.route("/signup", methods=["POST"])
 def signup():
     if request.method == 'POST':
         email = request.json.get('email', None)
         password = request.json.get('password', None)
-        access_token = create_access_token(identity = email)
+        #access_token = create_access_token(identity = email)
 
         if not email:
             return 'Email is required', 401
@@ -45,13 +46,21 @@ def signup():
 
         response = {
             'msg': 'User added successfully',
-            'token': access_token,
+            #'token': access_token,
             'email': 'email'
         }
         return jsonify(response), 200
 
+@api.route("users", methods=["GET"])
+def get_users():
+    users = User.query.all()
+    users = list(map(lambda index: index.serialize(), users))
+    response_body = {
+        "users": users
+    }   
+    return jsonify(response_body), 200
 
-        
+
 
 #@api.route("/signup", methods=["POST"])
 #def create_token():
