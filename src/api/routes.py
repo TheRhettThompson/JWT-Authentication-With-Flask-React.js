@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, Planets
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 #from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
@@ -89,7 +89,70 @@ def get_specific_user(user):
         "user": user.serialize()
     }), 200
     
+#GET route for Planets
+@api.route("/planets", methods=["GET"])
+def get_planets():
+    planets = Planets.query.all()
+    planets = list(map(lambda index: index.serialize(), planets))
+    response_body = {
+        "planets": planets
+    }   
+    return jsonify(response_body), 200
 
+#POST for planets
+@api.route("/planets", methods=["POST"])
+def post_planets():
+    if request.method == 'POST':
+        planets_name = request.json.get('name', None)
+        planets_diameter = request.json.get('diameter', None)
+        planets_population = request.json.get('population', None)
+        planets_climate = request.json.get('climate', None)
+
+        if not planets_name:
+            return 'Planet name is required', 401
+        if not planets_diameter:
+            return 'Planet diameter is required', 401
+        if not planets_population:
+            return 'Planet population is required', 401
+        if not planets_climate:
+            return 'Planet climate is required', 401
+
+        
+        planets_query = Planets.query.filter_by(name=planets_name).first()
+        if planets_query:
+            return 'This planet already exists' , 401
+
+        planets = Planets()
+        planets.name = planets_name
+        planets.diameter = planets_diameter
+        planets.population = planets_population
+        planets.climate = planets_climate
+        print(planets)
+        db.session.add(planets)
+        db.session.commit()
+
+        response = {
+            'msg': 'Planet added successfully',
+            #'token': access_token,
+            'planets_name': planets_name
+        }
+        return jsonify(response), 200
+
+# DELETE Planets
+@api.route("/planets/<int:planets>/", methods=["DELETE"])
+def delete_planets(planets):
+    planets = Planets.query.filter(Planets.id == planets).first()
+    if planets is None:
+        return jsonify({
+            "message": "Planet does not exist"
+        }), 404
+    db.session.delete(planets)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Planet was deleted successfully"
+    }), 201
+            
 
 #@api.route("/signup", methods=["POST"])
 #def create_token():
