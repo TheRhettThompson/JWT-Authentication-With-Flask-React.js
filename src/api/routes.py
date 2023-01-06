@@ -213,8 +213,8 @@ def post_vehicles():
         vehicles.crew = vehicles_crew
         vehicles.passengers = vehicles_passengers
         vehicles.classification = vehicles_classification
-        print(planets)
-        db.session.add(planets)
+        print(vehicles)
+        db.session.add(vehicles)
         db.session.commit()
 
         response = {

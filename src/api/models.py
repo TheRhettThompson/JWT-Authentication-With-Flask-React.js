@@ -51,7 +51,7 @@ class Vehicles(db.Model):
     length = db.Column(db.Integer, unique=False, nullable=False)
     crew = db.Column(db.Integer, unique=False, nullable=False)
     passengers = db.Column(db.Integer, unique=False, nullable=False)
-    classification = db.Column(db.String(120), unique=True, nullable=False)
+    classification = db.Column(db.String(120), unique=False, nullable=False)
    
     def __repr__(self):
         return f'<Vehicles {self.id}>'
