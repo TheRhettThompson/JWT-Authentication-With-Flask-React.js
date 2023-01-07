@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
+import "../../styles/index.css";
  
+
 export const Signup = () => {
 	const { store, actions} = useContext(Context);
 	const [email, setEmail] = useState("");
@@ -11,7 +13,7 @@ export const Signup = () => {
 	return (
 		<div>
 			<div className="signup-form">
-				<div>
+				<div className="forms">
 				<label>Email Address</label>
 				<input
 				type="email"
@@ -21,7 +23,7 @@ export const Signup = () => {
 				/>
 				</div>
 
-				<div>
+				<div className="forms">
 				<label>Password</label>
 				<input
 				type="password"
@@ -33,7 +35,9 @@ export const Signup = () => {
 			</div>
 
 			<div>
-				<button onClick={() =>actions.sign_up(email, password)} 
+				<button onClick={() =>actions.sign_up(email, password)} className= "btn btn-primary">
+					Submit
+				</button>
 			</div>
 		</div>
 

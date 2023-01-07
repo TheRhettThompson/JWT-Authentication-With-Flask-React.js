@@ -44,7 +44,7 @@ def signup():
         db.session.commit()
 
         response = {
-            'msg': 'User added successfully',
+            'message': 'User added successfully',
             'email': email
         }
         return jsonify(response), 200
@@ -122,6 +122,7 @@ def get_specific_user(user):
     
 #GET route for Planets
 @api.route("/planets", methods=["GET"])
+#@jwt_required()
 def get_planets():
     planets = Planets.query.all()
     planets = list(map(lambda index: index.serialize(), planets))
@@ -132,6 +133,7 @@ def get_planets():
 
 #POST for planets
 @api.route("/planets", methods=["POST"])
+#@jwt_required()
 def post_planets():
     if request.method == 'POST':
         planets_name = request.json.get('name', None)
@@ -167,7 +169,7 @@ def post_planets():
         db.session.commit()
 
         response = {
-            'msg': 'Planet added successfully',
+            'message': 'Planet added successfully',
             #'token': access_token,
             'planets_name': planets_name
         }
@@ -175,6 +177,7 @@ def post_planets():
 
 # DELETE Planets
 @api.route("/planets/<int:planets>/", methods=["DELETE"])
+#@jwt_required()
 def delete_planets(planets):
     planets = Planets.query.filter(Planets.id == planets).first()
     if planets is None:
@@ -190,6 +193,7 @@ def delete_planets(planets):
             
 # GET 1 SPECIFIC PLANET
 @api.route("/planets/<int:planets>/", methods=["GET"])
+#@jwt_required()
 def get_specific_planets(planets):
     planets = Planets.query.filter(Planets.id == planets).first()
 
@@ -205,7 +209,7 @@ def get_specific_planets(planets):
 #GET route for Vehicles
 @api.route("/vehicles", methods=["GET"])
 #LINE 213 how to limit what user sees, must have token in order to see Vehicles
-@jwt_required()
+#@jwt_required()
 def get_vehicles():
     vehicles = Vehicles.query.all()
     vehicles = list(map(lambda index: index.serialize(), vehicles))
@@ -216,6 +220,7 @@ def get_vehicles():
 
 #POST route for Vehicles
 @api.route("/vehicles", methods=["POST"])
+#@jwt_required()
 def post_vehicles():
     if request.method == 'POST':
         vehicles_name = request.json.get('name', None)
@@ -252,7 +257,7 @@ def post_vehicles():
         db.session.commit()
 
         response = {
-            'msg': 'Vehicle added successfully',
+            'message': 'Vehicle added successfully',
             #'token': access_token,
             'vehicles_name': vehicles_name
         }
@@ -260,6 +265,7 @@ def post_vehicles():
 
 #DELETE route for Vehicles
 @api.route("/vehicles/<int:vehicles>/", methods=["DELETE"])
+#@jwt_required()
 def delete_vehicles(vehicles):
     vehicles = Vehicles.query.filter(Vehicles.id == vehicles).first()
     if vehicles is None:
@@ -275,6 +281,7 @@ def delete_vehicles(vehicles):
 
 # GET 1 SPECIFIC VEHICLE
 @api.route("/vehicles/<int:vehicles>/", methods=["GET"])
+#@jwt_required()
 def get_specific_vehicles(vehicles):
     vehicles = Vehicles.query.filter(Vehicles.id == vehicles).first()
 
@@ -289,6 +296,7 @@ def get_specific_vehicles(vehicles):
 
 #GET route for Characters
 @api.route("/characters", methods=["GET"])
+#@jwt_required()
 def get_characters():
     characters = Characters.query.all()
     characters = list(map(lambda index: index.serialize(), characters))
@@ -299,6 +307,7 @@ def get_characters():
 
 #POST route for Characters
 @api.route("/characters", methods=["POST"])
+#@jwt_required()
 def post_characters():
     if request.method == 'POST':
         characters_name = request.json.get('name', None)
@@ -335,7 +344,7 @@ def post_characters():
         db.session.commit()
 
         response = {
-            'msg': 'Character added successfully',
+            'message': 'Character added successfully',
             #'token': access_token,
             'characters_name': characters_name
         }
@@ -344,6 +353,7 @@ def post_characters():
 
 #DELETE route for Characters
 @api.route("/characters/<int:characters>/", methods=["DELETE"])
+#@jwt_required()
 def delete_characters(characters):
     characters = Characters.query.filter(Characters.id == characters).first()
     if characters is None:
@@ -360,6 +370,7 @@ def delete_characters(characters):
 
 # GET 1 SPECIFIC Character
 @api.route("/characters/<int:characters>/", methods=["GET"])
+#@jwt_required()
 def get_specific_characters(characters):
     characters = Characters.query.filter(Characters.id == characters).first()
 
