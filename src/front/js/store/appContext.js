@@ -21,6 +21,7 @@ const injectContext = PassedComponent => {
 			})
 		);
 
+		/** We want useEffect to check each time if user has token before accessing pages */
 		useEffect(() => {
 			/**
 			 * EDIT THIS!

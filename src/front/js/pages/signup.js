@@ -1,11 +1,43 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { Context } from "../store/appContext";
  
 export const Signup = () => {
+	const { store, actions} = useContext(Context);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
+	//create State for email and password
 
 	return (
-		<div className="text-center mt-5">
-			<h1>This is the Signup page</h1>
-			  
+		<div>
+			<div className="signup-form">
+				<div>
+				<label>Email Address</label>
+				<input
+				type="email"
+				value={email}
+				placeholder="Enter your email"
+				onChange={e => setEmail(e.target.value)}
+				/>
+				</div>
+
+				<div>
+				<label>Password</label>
+				<input
+				type="password"
+				value={password}
+				placeholder="Enter your password"
+				onChange={e => setPassword(e.target.value)}
+				/>
+				</div>
+			</div>
+
+			<div>
+				<button onClick={() =>actions.sign_up(email, password)} 
+			</div>
 		</div>
+
+		//create button to send data to endpoint (user information)
+
 	);
 };

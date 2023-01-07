@@ -4,8 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Planets, Vehicles, Characters
 from api.utils import generate_sitemap, APIException
-from flask_jwt_extended import create_access_token
-#from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
 api = Blueprint('api', __name__)
 
@@ -24,7 +23,8 @@ def signup():
     if request.method == 'POST':
         email = request.json.get('email', None)
         password = request.json.get('password', None)
-        #access_token = create_access_token(identity = email)
+        #access_token = create_access_token(identity = email) 
+        #access_token only needed after new user signs up
 
         if not email:
             return 'Email is required', 401
@@ -33,7 +33,7 @@ def signup():
         
         email_query = User.query.filter_by(email=email).first()
         if email_query:
-            return 'This email already exists' , 401
+            return 'This email already exists' , 402
 
         user = User()
         user.email = email
@@ -45,10 +45,42 @@ def signup():
 
         response = {
             'msg': 'User added successfully',
-            #'token': access_token,
             'email': email
         }
         return jsonify(response), 200
+
+@api.route('/login', methods=['POST'])
+def sign_in():
+    #this is the code we worked on in December 2022...but the new code allows us to see specifically which is the issue, either no email or no password 
+    #Will update code after watching recording 1/06/22
+    #body = request.get_json()
+    #if body is None:
+        #return jsonify({'Error: Body is empty'})
+
+    #email = body['email']
+    #password = body['password']
+
+    ##alternate way 
+    #user = User.query.filter_by(email = email, password = password).first()
+    #if user is None:
+        #return jsonify({'msg: Email or password are wrong'})
+
+
+    if request.method == 'POST':
+        email = request.json.get('email', None)
+        password = request.json.get('password', None)
+        if not email:
+            return 'Email is required', 401
+        if not password:
+            return 'Password is required', 401
+
+    user = User.query.filter_by(email = email, password = password).first()
+    if user is None:
+        return 'error: This user was not found' , 401
+    token = create_access_token(identity = user.id)
+    print(token)
+    return jsonify({"message: Successfully logged in. Token: ": token}), 200
+
 
 @api.route("/users", methods=["GET"])
 def get_users():
@@ -172,6 +204,8 @@ def get_specific_planets(planets):
 
 #GET route for Vehicles
 @api.route("/vehicles", methods=["GET"])
+#LINE 213 how to limit what user sees, must have token in order to see Vehicles
+@jwt_required()
 def get_vehicles():
     vehicles = Vehicles.query.all()
     vehicles = list(map(lambda index: index.serialize(), vehicles))

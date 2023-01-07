@@ -30,6 +30,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type = True)
 db.init_app(app)
 
+#PASTED FROM JWT WEBSITE
+app.config["JWT_SECRET_KEY"] = "super-secret" # Change this!
+jwt = JWTManager(app)
+
 # Allow CORS requests to this API
 CORS(app)
 
