@@ -5,7 +5,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			api: "https://3001-therhetttho-jwtauthenti-agjeiu81f96.ws-us81.gitpod.io/",
 			isAuthenticated: false,
-			vehicles: []
+			vehicles: [],
+			planets: [],
+			characters: []
 		},
 
 		//Add sign-up fetch request as an Action
@@ -47,10 +49,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			})
 			.then(response => response.json())
-			.then(data => setStore({ vehicles: data}))
+			.then(data => setStore({ vehicles: data }))
 			.catch(error => console.log(error))
-			}
+			
 
+			// PLANETS
+			fetch(`${store.api}/api/planets/`, {
+				headers: {
+					"Content-type": "application/json",
+					Authorization: `Bearer ${(localStorage.getItem('token'))}`
+				}
+			})
+			.then(response => response.json())
+			.then(data => setStore({ planets: data }))
+			.catch(error => console.log(error))
+			
+
+			//CHARACTERS
+			fetch(`${store.api}/api/characters/`, {
+				headers: {
+					"Content-type": "application/json",
+					Authorization: `Bearer ${(localStorage.getItem('token'))}`
+				}
+			})
+			.then(response => response.json())
+			.then(data => setStore({ characters: data }))
+			.catch(error => console.log(error))
 
 			//getMessage: async () => {
 				//try{
@@ -79,7 +103,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//setStore({ demo: demo });
 			//}
 		}
-	};
+	}
 };
 
 export default getState;
