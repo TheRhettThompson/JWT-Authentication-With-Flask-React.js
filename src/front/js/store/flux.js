@@ -40,6 +40,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.log("Error during login", error))
 			},
 
+			sign_in: (email, password) => {
+				const store = getStore();
+
+				fetch(`${store.api}/api/login`, {
+					method: 'POST',
+					body: JSON.stringify({
+						email: email,
+						password: password
+
+					}),
+
+					headers:{
+						"Content-type": "applicatino/json",
+						"Access-Control-Allow-Origin": "*"
+						
+					}
+				})
+			}
+
+
+			
 		loadData: () =>{
 			const store = getStore();
 

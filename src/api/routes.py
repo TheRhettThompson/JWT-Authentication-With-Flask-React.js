@@ -5,14 +5,17 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Planets, Vehicles, Characters
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
+from flask_cors import CORS, cross_origin
 
 api = Blueprint('api', __name__)
+CORS(api)
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
 
     response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+        jsonify(message="Simple server is running")
+        response_body.headers.add("Access-Control-Allow-Origin", "*")
     }
 
     return jsonify(response_body), 200
@@ -133,7 +136,6 @@ def get_planets():
 
 #POST for planets
 @api.route("/planets", methods=["POST"])
-@jwt_required()
 def post_planets():
     if request.method == 'POST':
         planets_name = request.json.get('name', None)
@@ -177,7 +179,6 @@ def post_planets():
 
 # DELETE Planets
 @api.route("/planets/<int:planets>/", methods=["DELETE"])
-@jwt_required()
 def delete_planets(planets):
     planets = Planets.query.filter(Planets.id == planets).first()
     if planets is None:
@@ -220,7 +221,6 @@ def get_vehicles():
 
 #POST route for Vehicles
 @api.route("/vehicles", methods=["POST"])
-@jwt_required()
 def post_vehicles():
     if request.method == 'POST':
         vehicles_name = request.json.get('name', None)
@@ -265,7 +265,6 @@ def post_vehicles():
 
 #DELETE route for Vehicles
 @api.route("/vehicles/<int:vehicles>/", methods=["DELETE"])
-@jwt_required()
 def delete_vehicles(vehicles):
     vehicles = Vehicles.query.filter(Vehicles.id == vehicles).first()
     if vehicles is None:
@@ -307,7 +306,6 @@ def get_characters():
 
 #POST route for Characters
 @api.route("/characters", methods=["POST"])
-@jwt_required()
 def post_characters():
     if request.method == 'POST':
         characters_name = request.json.get('name', None)
@@ -353,7 +351,6 @@ def post_characters():
 
 #DELETE route for Characters
 @api.route("/characters/<int:characters>/", methods=["DELETE"])
-@jwt_required()
 def delete_characters(characters):
     characters = Characters.query.filter(Characters.id == characters).first()
     if characters is None:

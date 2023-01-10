@@ -16,8 +16,10 @@ export const Home = () => {
 			 <div className="buttons">
 				<Link to={'/signup'}>
 					<button>Sign Up</button>
-				</Link>
+				</Link>	
+				<Link to={'/login'}>
 					<button>Log In</button>
+				</Link>
 			</div>
 		</div>
 	);

@@ -12,6 +12,7 @@ import { Private } from "./pages/private";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+import { Dashboard } from "./pages/dashboard";
 
 
 
@@ -38,6 +39,8 @@ const Layout = () => {
                         <Route exact path="=/login" element={<Login />}/>
 
                         <Route exact path="/private" element={<Private />}/>
+
+                        <Route exact path="/dashboard" element={<Dashboard />}/>
                     </Routes>
                     <Footer />
                 </ScrollToTop>
