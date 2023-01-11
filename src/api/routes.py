@@ -10,18 +10,17 @@ from flask_cors import CORS, cross_origin
 api = Blueprint('api', __name__)
 CORS(api)
 
+
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
 
-    response_body = {
-        jsonify(message="Simple server is running")
-        response_body.headers.add("Access-Control-Allow-Origin", "*")
-    }
-
-    return jsonify(response_body), 200
+    response_body = jsonify(message="Simple server is running")
+    response_body.headers.add("Access-Control-Allow-Origin", "*")
+    return response_body, 200
 
 
 @api.route("/signup", methods=["POST"])
+@cross_origin()
 def signup():
     if request.method == 'POST':
         email = request.json.get('email', None)
@@ -53,6 +52,8 @@ def signup():
         return jsonify(response), 200
 
 @api.route('/login', methods=['POST'])
+@cross_origin()
+
 def sign_in():
     #this is the code we worked on in December 2022...but the new code allows us to see specifically which is the issue, either no email or no password 
     #Will update code after watching recording 1/06/22
@@ -82,17 +83,20 @@ def sign_in():
         return 'error: This user was not found' , 401
     token = create_access_token(identity = user.id)
     print(token)
-    return jsonify({"message: Successfully logged in. Token: ": token}), 200
+    return jsonify({
+        "message" : "Successfully logged in." ,
+        "token: " : token}), 200
+
 
 
 @api.route("/users", methods=["GET"])
 def get_users():
     users = User.query.all()
     users = list(map(lambda index: index.serialize(), users))
-    response_body = {
-        "users": users
-    }   
-    return jsonify(response_body), 200
+    response_body = jsonify(users)
+    response_body.headers.add("Access-Control-Allow-Origin", "*")
+    return response_body, 200
+    
 
 # DELETE USER 
 @api.route("/users/<int:user>/", methods=["DELETE"])
@@ -129,13 +133,15 @@ def get_specific_user(user):
 def get_planets():
     planets = Planets.query.all()
     planets = list(map(lambda index: index.serialize(), planets))
-    response_body = {
-        "planets": planets
-    }   
-    return jsonify(response_body), 200
+    response_body = jsonify(planets)
+    response_body.headers.add("Access-Control-Allow-Origin", "*")
+    return response_body, 200
+       
 
 #POST for planets
 @api.route("/planets", methods=["POST"])
+@cross_origin()
+
 def post_planets():
     if request.method == 'POST':
         planets_name = request.json.get('name', None)
@@ -214,13 +220,15 @@ def get_specific_planets(planets):
 def get_vehicles():
     vehicles = Vehicles.query.all()
     vehicles = list(map(lambda index: index.serialize(), vehicles))
-    response_body = {
-        "vehicles": vehicles
-    }   
-    return jsonify(response_body), 200
+    response_body = jsonify(vehicles)
+    response_body.headers.add('Access-Control-Allow-Origin', '*')
+    return response_body, 200
+
 
 #POST route for Vehicles
 @api.route("/vehicles", methods=["POST"])
+@cross_origin()
+
 def post_vehicles():
     if request.method == 'POST':
         vehicles_name = request.json.get('name', None)
@@ -299,10 +307,10 @@ def get_specific_vehicles(vehicles):
 def get_characters():
     characters = Characters.query.all()
     characters = list(map(lambda index: index.serialize(), characters))
-    response_body = {
-        "characters": characters
-    }   
-    return jsonify(response_body), 200
+    response_body = jsonify(characters)
+    response_body.headers.add('Access-Control-Allow-Origin', '*')
+    return response_body, 200
+    
 
 #POST route for Characters
 @api.route("/characters", methods=["POST"])

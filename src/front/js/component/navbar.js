@@ -2,11 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
-
-	const signOut = (token) => {
-		localStorage.clear()
-	}
-
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
@@ -18,9 +13,6 @@ export const Navbar = () => {
 						<button className="btn btn-primary">Check the Context in action</button>
 					</Link>
 				</div>
-				<Link to="/">
-				
-				</Link>button onClick={}>Sign Out</button>
 			</div>
 		</nav>
 	);

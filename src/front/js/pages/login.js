@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/index.css";
-import { Link } from "react-router-dom";
- 
+
 
 export const Login = () => {
 	const { store, actions} = useContext(Context);
@@ -39,14 +38,11 @@ export const Login = () => {
 			</div>
 
 			<div>
-				<Link to= "/private">
-					<button onClick={() =>actions.sign_up(email, password)} className= "btn btn-primary">
-						Submit
-					</button>
-				</Link>
+				<button onClick={() =>actions.sign_up(email, password)} className= "btn btn-primary">
+					Login
+				</button>
 			</div>
 		</div>
-
 		//create button to send data to endpoint (user information)
 
 	);

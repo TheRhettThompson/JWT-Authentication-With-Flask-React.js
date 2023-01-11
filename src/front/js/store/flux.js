@@ -25,7 +25,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						password: password
 					}),
 					headers: {
-						"Content-type": "application/json"
+						"Content-type": "application/json",
+						'Access-Control-Allow-Origin': '*'
 					}
 				})
 					.then(resp => {
@@ -33,12 +34,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return resp.json();
 						}
 					})
-					//.then(data => {
-						//localStorage.setItem("token", data.token);
-						//setStore({ isAuthenticated: true});
-					//})
+					.then(data => {
+						localStorage.setItem("token", data.token);
+						setStore({ isAuthenticated: true});
+					})
 					.catch(error => console.log("Error during login", error))
-			},
+				},
 
 			sign_in: (email, password) => {
 				const store = getStore();
@@ -48,55 +49,65 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({
 						email: email,
 						password: password
-
 					}),
 
 					headers:{
-						"Content-type": "applicatino/json",
+						"Content-type": "application/json",
 						"Access-Control-Allow-Origin": "*"
-						
 					}
 				})
-			}
-
+					.then(resp => {
+						if (resp.ok) {
+							return resp.json();
+						}
+					})
+					.then(data => {
+						localStorage.setItem('token', data.token);
+						setStore( {isAuthenticated: true});
+					})
+					.catch(error => console.log('There  was an error signing in', error));
+			},
 
 			
-		loadData: () =>{
-			const store = getStore();
+			loadData: () =>{
+				const store = getStore();
 
-			fetch(`${store.api}/api/vehicles/`, {
-				headers: {
-					"Content-type": "application/json",
-					Authorization: `Bearer ${(localStorage.getItem('token'))}`
-				}
-			})
-				.then(response => response.json())
-				.then(data => setStore({ vehicles: data }))
-				.catch(error => console.log(error));
+				fetch(`${store.api}/api/vehicles/`, {
+					headers: {
+						"Content-type": "application/json",
+						'Access-Control-Allow-Origin': '*',
+						Authorization: `Bearer ${(localStorage.getItem('token'))}`
+					}
+				})
+					.then(response => response.json())
+					.then(data => setStore({ vehicles: data }))
+					.catch(error => console.log(error));
+				
+			
+				// PLANETS
+				fetch(`${store.api}/api/planets/`, {
+					headers: {
+						"Content-type": "application/json",
+						'Access-Control-Allow-Origin': '*',
+						Authorization: `Bearer ${(localStorage.getItem('token'))}`
+					}
+				})
+					.then(response => response.json())
+					.then(data => setStore({ planets: data }))
+					.catch(error => console.log(error));
 				
 
-			// PLANETS
-			fetch(`${store.api}/api/planets/`, {
-				headers: {
-					"Content-type": "application/json",
-					Authorization: `Bearer ${(localStorage.getItem('token'))}`
-				}
-			})
-				.then(response => response.json())
-				.then(data => setStore({ planets: data }))
-				.catch(error => console.log(error));
-			
-
-			//CHARACTERS
-			fetch(`${store.api}/api/characters/`, {
-				headers: {
-					"Content-type": "application/json",
-					Authorization: `Bearer ${(localStorage.getItem('token'))}`
-				}
-			})
-				.then(response => response.json())
-				.then(data => setStore({ characters: data }))
-				.catch(error => console.log(error));
+				//CHARACTERS
+				fetch(`${store.api}/api/characters/`, {
+					headers: {
+						"Content-type": "application/json",
+						'Access-Control-Allow-Origin': '*',
+						Authorization: `Bearer ${(localStorage.getItem('token'))}`
+					}
+				})
+					.then(response => response.json())
+					.then(data => setStore({ characters: data }))
+					.catch(error => console.log(error))
 
 			
 			}
